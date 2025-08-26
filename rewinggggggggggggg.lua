@@ -1,4 +1,4 @@
--- Простіше вікно для тесту GUI у Roblox
+-- Вікно + авто збір предметів для Roblox YBA
 
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
@@ -64,4 +64,23 @@ closeBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
 
 closeBtn.MouseButton1Click:Connect(function()
     gui:Destroy()
+end)
+
+-- Функція для автоматичного збору предметів
+spawn(function()
+    while true do
+        if autoCollect and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            for _, obj in pairs(game:GetService("Workspace"):GetChildren()) do
+                -- Змінюйте умову нижче під реальні назви спавнів предметів у YBA
+                if obj:IsA("Part") and (obj.Name == "ItemSpawn" or obj.Name == "Item") then
+                    pcall(function()
+                        firetouchinterest(player.Character.HumanoidRootPart, obj, 0)
+                        wait(0.1)
+                        firetouchinterest(player.Character.HumanoidRootPart, obj, 1)
+                    end)
+                end
+            end
+        end
+        wait(2)
+    end
 end)
