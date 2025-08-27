@@ -1,4 +1,4 @@
--- Вікно + авто збір предметів для Roblox YBA
+-- GUI з кнопкою для авто збору предметів у YBA
 
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
@@ -6,7 +6,7 @@ gui.Name = "YBA_AutoWindow"
 gui.Parent = player:WaitForChild("PlayerGui")
 
 local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 250, 0, 180)
+frame.Size = UDim2.new(0, 250, 0, 130)
 frame.Position = UDim2.new(0.5, -125, 0.3, 0)
 frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 frame.BorderSizePixel = 0
@@ -20,8 +20,6 @@ title.Font = Enum.Font.SourceSansBold
 title.TextSize = 22
 
 local autoCollect = false
-local autoSell = false
-local autoRejoin = false
 
 local collectBtn = Instance.new("TextButton", frame)
 collectBtn.Text = "Авто збір предметів: ВИКЛ"
@@ -34,28 +32,6 @@ collectBtn.MouseButton1Click:Connect(function()
     collectBtn.Text = "Авто збір предметів: " .. (autoCollect and "ВКЛ" or "ВИКЛ")
 end)
 
-local sellBtn = Instance.new("TextButton", frame)
-sellBtn.Text = "Авто продаж: ВИКЛ"
-sellBtn.Size = UDim2.new(0.95, 0, 0, 30)
-sellBtn.Position = UDim2.new(0.025, 0, 0, 80)
-sellBtn.BackgroundColor3 = Color3.fromRGB(120, 50, 50)
-
-sellBtn.MouseButton1Click:Connect(function()
-    autoSell = not autoSell
-    sellBtn.Text = "Авто продаж: " .. (autoSell and "ВКЛ" or "ВИКЛ")
-end)
-
-local rejoinBtn = Instance.new("TextButton", frame)
-rejoinBtn.Text = "Авто перезаходження: ВИКЛ"
-rejoinBtn.Size = UDim2.new(0.95, 0, 0, 30)
-rejoinBtn.Position = UDim2.new(0.025, 0, 0, 120)
-rejoinBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 120)
-
-rejoinBtn.MouseButton1Click:Connect(function()
-    autoRejoin = not autoRejoin
-    rejoinBtn.Text = "Авто перезаходження: " .. (autoRejoin and "ВКЛ" or "ВИКЛ")
-end)
-
 local closeBtn = Instance.new("TextButton", frame)
 closeBtn.Text = "Закрити"
 closeBtn.Size = UDim2.new(0.95, 0, 0, 30)
@@ -66,13 +42,13 @@ closeBtn.MouseButton1Click:Connect(function()
     gui:Destroy()
 end)
 
--- Функція для автоматичного збору предметів
+-- ФУНКЦІЯ АВТОМАТИЧНОГО ЗБОРУ ПРЕДМЕТІВ
 spawn(function()
     while true do
         if autoCollect and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            for _, obj in pairs(game:GetService("Workspace"):GetChildren()) do
-                -- Змінюйте умову нижче під реальні назви спавнів предметів у YBA
-                if obj:IsA("Part") and (obj.Name == "ItemSpawn" or obj.Name == "Item") then
+            for _, obj in pairs(workspace:GetChildren()) do
+                -- Змінити "ItemSpawn" на фактичну назву предметів у грі, якщо потрібно
+                if obj:IsA("Part") and obj.Name == "ItemSpawn" then
                     pcall(function()
                         firetouchinterest(player.Character.HumanoidRootPart, obj, 0)
                         wait(0.1)
@@ -81,6 +57,6 @@ spawn(function()
                 end
             end
         end
-        wait(2)
+        wait(1.5) -- Частота перевірки (можна змінити)
     end
 end)
